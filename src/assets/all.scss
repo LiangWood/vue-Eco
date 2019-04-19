@@ -1,0 +1,9 @@
+@import "~bootstrap/scss/bootstrap";
+@import "./_dashboard";
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC|Open+Sans');
+
+body {
+    font-family: "Open Sans";
+    font-family: "Noto Sans TC";
+    font-size: 1rem;
+}
