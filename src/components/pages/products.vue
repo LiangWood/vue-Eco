@@ -1,5 +1,6 @@
 <template>
   <div>
+      <loading :active.sync="isLoading"></loading>
     <div class="text-right">
       <button class="btn btn-primary mt-4" @click="openModal(true)">建立新的產品</button>
     </div>
@@ -59,7 +60,7 @@
                     <i class="fas fa-spinner fa-spin"></i>
                   </label>
                   <input type="file" id="customFile" class="form-control"
-                    ref="files">
+                    ref="files" @change="upload()">
                 </div>
                 <img img="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=828346ed697837ce808cae68d3ddc3cf&auto=format&fit=crop&w=1350&q=80"
                   class="img-fluid" :src="tempProduct.imageUrl" alt="">
@@ -172,13 +173,16 @@ export default {
     return {
       products: [],
       tempProduct: {},
-      isNew: false
+      isNew: false,
+      isLoading: false
     }
   },
   methods: {
     getProducts () {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/products`
+      this.isLoading = true
       this.$http.get(api).then((res) => {
+        this.isLoading = false
         console.log(res.data)
         this.products = res.data.products
       })
@@ -219,17 +223,36 @@ export default {
         api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/product/${this.tempProduct.id}`
         httpMethods = 'put'
       }
-      this.$http[httpMethods](api, { data: this.tempProduct }).then((res) => {
+      this.$http.post(api, { data: this.tempProduct }).then((res) => {
         console.log(res.data)
         if (res.data.success) {
+          this.$bus.$emit('message:push', res.data.message, 'success');
           $('#productModal').modal('hide')
           this.getProducts()
         } else {
           $('#productModal').modal('hide')
+          this.$bus.$emit('message:push', res.data.message, 'danger');
           this.getProducts()
           console.log('新增失敗')
         }
       })
+    },
+    upload () {
+        console.log(this)
+        const uploadedFile = this.$refs.files.files[0]
+        const formData = new FormData()
+        formData.append('file-to-upload', uploadedFile)
+        const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/upload`
+        this.$http.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((res) => {
+            // console.log(res.data)
+            if (res.data.success) {
+                this.$set(this.tempProduct, 'imageUrl', res.data.imageUrl)
+            }
+        })
     }
   },
   created () {
