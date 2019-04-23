@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from './components/pages/login.vue'
 import Products from './components/pages/products.vue'
 import Dashboard from './components/Dashboard.vue'
+import CustomOrder from './components/pages/CustomOrder.vue'
 
 Vue.use(Router)
 
@@ -11,6 +12,11 @@ export default new Router({
     {
       path: '*',
       redirect: 'login'
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '/admin',
@@ -26,10 +32,16 @@ export default new Router({
       ]
     },
     {
-      path: '/login',
-      name: 'login',
-      component: Login,
-      meta: { requiresAuth: true }
+      path: '/',
+      name: 'Dashboard',
+      component: Dashboard,
+      children: [
+        {
+          path: 'custom_order',
+          name: 'custom_order',
+          component: CustomOrder,
+        }
+      ]
     }
   ]
 })

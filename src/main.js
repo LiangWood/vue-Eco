@@ -8,12 +8,19 @@ import 'bootstrap'
 import App from './App.vue'
 import router from './router'
 import './bus'
+import pagination from './components/pagination'
+import currencyFilter from './filters/currency'
+
+Vue.config.productionTip = false;
 
 Vue.use(VueAxios, axios)
+axios.defaults.withCredentials = true;
 
+//全域啟動元件
 Vue.component('Loading', Loading)
+Vue.component('pagination', pagination)
+Vue.filter('currency', currencyFilter)
 
-axios.defaults.withCredentials = true
 
 new Vue({
   router,

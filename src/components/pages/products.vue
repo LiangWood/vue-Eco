@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <loading :active.sync="isLoading"></loading>
+<div>
+    <loading :active.sync="isLoading"></loading>
     <div class="text-right">
       <button class="btn btn-primary mt-4" @click="openModal(true)">建立新的產品</button>
     </div>
@@ -18,10 +18,10 @@
           <td>{{ item.category }}</td>
           <td>{{ item.title }}</td>
           <td class="text-right">
-            {{ item.origin_price }}
+            {{ item.origin_price | currency }}
           </td>
           <td class="text-right">
-            {{ item.price }}
+            {{ item.price | currency }}
           </td>
           <td>
             <span v-if="item.is_enabled" class="text-success">啟用</span>
@@ -34,6 +34,9 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- pagination -->
+    <pagination :pageData="pagination" @changepage="getProducts"></pagination>
 
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -162,7 +165,8 @@
         </div>
       </div>
     </div>
-  </div>
+
+</div>
 </template>
 
 <script>
@@ -171,6 +175,7 @@ import $ from 'jquery'
 export default {
   data () {
     return {
+      pagination: {},
       products: [],
       tempProduct: {},
       isNew: false,
@@ -181,17 +186,18 @@ export default {
     }
   },
   methods: {
-    getProducts () {
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/products`
+    getProducts (page = 1) {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/products?page=${page}`
       this.isLoading = true
       this.$http.get(api).then((res) => {
         this.isLoading = false
         console.log(res.data)
         this.products = res.data.products
+        this.pagination = res.data.pagination
       })
     },
     openModal (isNew, item) {
-      if (this.isNew) {
+      if (isNew) {
         this.tempProduct = {}
         this.isNew = true
       } else {
@@ -229,7 +235,6 @@ export default {
       this.$http[httpMethods](api, { data: this.tempProduct }).then((res) => {
         console.log(res.data)
         if (res.data.success) {
-          this.$bus.$emit('message:push', res.data.message, 'success');
           $('#productModal').modal('hide')
           this.getProducts()
         } else {
@@ -256,6 +261,9 @@ export default {
             if (res.data.success) {
                 this.status.uploading = false
                 this.$set(this.tempProduct, 'imageUrl', res.data.imageUrl)
+            } else {
+              this.$bus.$emit('messsage:push', res.data.message, 'danger')
+              this.status.uploading = false
             }
         })
     }
