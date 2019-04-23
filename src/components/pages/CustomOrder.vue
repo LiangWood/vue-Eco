@@ -20,14 +20,37 @@
             </div>
           </div>
           <div class="card-footer d-flex">
-            <button type="button" class="btn btn-outline-secondary btn-sm">
-              <i class="fas fa-spinner fa-spin"></i>
+            <button type="button" class="btn btn-outline-secondary btn-sm" @click="getProduct(item.id)">
               查看更多
             </button>
             <button type="button" class="btn btn-outline-danger btn-sm ml-auto">
-              <i class="fas fa-spinner fa-spin"></i>
               加到購物車
             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ product.title }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <img :src="product.imageUrl" class="img-fluid" alt="">
+            <blockquote class="blockquote mt-3">
+              <p class="mb-0">{{ product.content }}</p>
+              <footer class="blockquote-footer text-right">{{ product.description }}</footer>
+            </blockquote>
+            <div class="d-flex justify-content-between align-items-baseline">
+              <div class="h4" v-if="!product.price">{{ product.origin_price }} 元</div>
+              <del class="h6" v-if="product.price">原價 {{ product.origin_price }} 元</del>
+              <div class="h4" v-if="product.price">現在只要 {{ product.price }} 元</div>
+            </div>
           </div>
         </div>
       </div>
@@ -36,10 +59,13 @@
 </template>
 
 <script>
+import $ from 'jquery'
+
 export default {
-  data() {
+  data () {
     return {
       products: [],
+      product: {},
       isLoading: false
     }
   },
@@ -52,9 +78,20 @@ export default {
         console.log(res.data)
         this.products = res.data.products
       })
+    },
+    getProduct(id) {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/product/${id}`
+      this.isLoading = true
+      this.$http.get(api).then((res) => {
+        console.log(res.data)
+        this.product = res.data.product
+        $('#productModal').modal('show');
+        this.isLoading = false
+
+      })   
     }
   },
-  created() {
+  created () {
     this.getProducts()
   }
 

@@ -239,33 +239,33 @@ export default {
           this.getProducts()
         } else {
           $('#productModal').modal('hide')
-          this.$bus.$emit('message:push', res.data.message, 'danger');
+          this.$bus.$emit('message:push', res.data.message, 'danger')
           this.getProducts()
           console.log('新增失敗')
         }
       })
     },
     uploadFile () {
-        console.log(this)
-        const uploadedFile = this.$refs.files.files[0]
-        const formData = new FormData()
-        formData.append('file-to-upload', uploadedFile)
-        const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/upload`
-        this.status.uploading = true
-        this.$http.post(url, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then((res) => {
-            // console.log(res.data)
-            if (res.data.success) {
-                this.status.uploading = false
-                this.$set(this.tempProduct, 'imageUrl', res.data.imageUrl)
-            } else {
-              this.$bus.$emit('messsage:push', res.data.message, 'danger')
-              this.status.uploading = false
-            }
-        })
+      console.log(this)
+      const uploadedFile = this.$refs.files.files[0]
+      const formData = new FormData()
+      formData.append('file-to-upload', uploadedFile)
+      const url = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/upload`
+      this.status.uploading = true
+      this.$http.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        // console.log(res.data)
+        if (res.data.success) {
+          this.status.uploading = false
+          this.$set(this.tempProduct, 'imageUrl', res.data.imageUrl)
+        } else {
+          this.$bus.$emit('messsage:push', res.data.message, 'danger')
+          this.status.uploading = false
+        }
+      })
     }
   },
   created () {

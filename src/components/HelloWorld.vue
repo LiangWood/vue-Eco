@@ -13,11 +13,11 @@ export default {
     msg: String
   },
   methods: {
-    logout() {
+    logout () {
       const api = `${process.env.VUE_APP_APIPATH}/logout`
-      this.$http.post(api).then((res)=>{
+      this.$http.post(api).then((res) => {
         console.log(res.data)
-        if(res.data.success) {
+        if (res.data.success) {
           this.$router.push('/login')
         }
       })

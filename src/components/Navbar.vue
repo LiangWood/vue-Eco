@@ -15,18 +15,17 @@
 <script>
 export default {
   name: 'navbar',
-  methods:{
-    logout() {
-        const api = `${process.env.VUE_APP_APIPATH}/logout`
-        this.$http.post(api).then((res)=>{
-          console.log(res.data)
-          if(res.data.success) {
-            this.$router.push('./login')
-          }
-        })
+  methods: {
+    logout () {
+      const api = `${process.env.VUE_APP_APIPATH}/logout`
+      this.$http.post(api).then((res) => {
+        console.log(res.data)
+        if (res.data.success) {
+          this.$router.push('./login')
+        }
+      })
     }
   }
 }
 
 </script>
-

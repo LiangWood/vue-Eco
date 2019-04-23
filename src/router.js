@@ -39,7 +39,7 @@ export default new Router({
         {
           path: 'custom_order',
           name: 'custom_order',
-          component: CustomOrder,
+          component: CustomOrder
         }
       ]
     }

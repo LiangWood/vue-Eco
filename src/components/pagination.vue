@@ -37,7 +37,7 @@ export default {
     }
   },
   methods: {
-    changePage(page) {
+    changePage (page) {
       this.$emit('changepage', page)
     }
   }
