@@ -23,7 +23,10 @@
             <button type="button" class="btn btn-outline-secondary btn-sm" @click="getProduct(item.id)">
               查看更多
             </button>
-            <button type="button" class="btn btn-outline-danger btn-sm ml-auto">
+            <button
+            type="button"
+            class="btn btn-outline-danger btn-sm ml-auto"
+            @click="addtoCart(item.id)">
               加到購物車
             </button>
           </div>
@@ -51,6 +54,19 @@
               <del class="h6" v-if="product.price">原價 {{ product.origin_price }} 元</del>
               <div class="h4" v-if="product.price">現在只要 {{ product.price }} 元</div>
             </div>
+            <select name="" class="form-control mt-3" v-model="product.num">
+              <option :value="num" v-for="num in 10" :key="num">
+                選購 {{ num }} {{ product.unit }}
+              </option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <div class="text-muted text-nowrap mr-3">
+              小計 <strong>{{ product.num * product.price }}</strong> 元
+            </div>
+            <button type="button" class="btn btn-primary">
+              加到購物車
+            </button>
           </div>
         </div>
       </div>
@@ -88,7 +104,17 @@ export default {
         $('#productModal').modal('show');
         this.isLoading = false
 
-      })   
+      })
+    },
+    addtoCart(id, qty = 1) {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
+      const cart = {
+        product_id: id,
+        qty
+      }
+      this.$http.post(api, { data: cart }).then((res) => {
+        console.log(res.data)
+      })
     }
   },
   created () {
