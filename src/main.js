@@ -10,11 +10,16 @@ import router from './router'
 import './bus'
 import pagination from './components/pagination'
 import currencyFilter from './filters/currency'
+import VeeValidate from 'vee-validate'
+import zhTWValidate from 'vee-validate/dist/locale/zh_TW'
 
 Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)
 axios.defaults.withCredentials = true
+
+Vue.use(VeeValidate)
+VeeValidate.Validator.localize('zh_TW', zhTWValidate)
 
 // 全域啟動元件
 Vue.component('Loading', Loading)

@@ -33,6 +33,100 @@
         </div>
       </div>
     </div>
+    <!-- 購物車清單 -->
+    <div class="container mt-5">
+      <table class="table">
+        <thead>
+          <th></th>
+          <th>品名</th>
+          <th>數量</th>
+          <th>單價</th>
+        </thead>
+        <tbody>
+          <tr v-for="(item, key) in cart.carts" :key="key">
+            <td class="align-middle">
+              <!-- 刪除按鈕 -->
+              <button
+              type="button"
+              class="btn btn-outline-danger btn-sm"
+              @click="removeCartItem(item.id)">
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </td>
+            <td class="align-middle">
+              {{ item.product.title }}
+              <!-- <div class="text-success" v-if="item.coupon">
+                已套用優惠券
+              </div> -->
+            </td>
+            <td class="align-middle">{{ item.qty }}/{{ item.product.unit }}</td>
+            <td class="align-middle text-right">{{ item.final_total }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="text-right">總計</td>
+            <td class="text-right">{{ cart.total }}</td>
+          </tr>
+          <tr v-if="cart.final_total !== cart.total">
+            <td colspan="3" class="text-right text-success">折扣價</td>
+            <td class="text-right text-success">{{ cart.final_total }}</td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="input-group mb-3 input-group-sm">
+        <input type="text" class="form-control" v-model="cart.coupon" placeholder="請輸入優惠碼">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button">
+            套用優惠碼
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="my-5 row justify-content-center">
+        <form class="col-md-6" @submit.prevent="createOrder">
+          <div class="form-group">
+            <label for="useremail">Email</label>
+            <input type="email" class="form-control" name="email" id="useremail"
+              v-validate="'required|email'"
+              :class="{'is-invalid' : errors.has('email')}"
+              v-model="form.user.email" placeholder="請輸入 Email">
+            <span class="text-danger" v-if="errors.has('email')">{{ errors.first('email') }}</span>
+          </div>
+          <div class="form-group">
+            <label for="username">收件人姓名</label>
+            <input type="text" class="form-control" name="name" id="username"
+              :class="{'is-invalid' : errors.has('name')}"
+              v-model="form.user.name" placeholder="輸入姓名" v-validate="'required'">
+            <span class="text-danger" v-if="errors.has('name')">姓名為必填</span>
+          </div>
+
+          <div class="form-group">
+            <label for="usertel">收件人電話</label>
+            <input type="tel" class="form-control" id="usertel" v-model="form.user.tel" placeholder="請輸入電話">
+          </div>
+
+          <div class="form-group">
+            <label for="useraddress">收件人地址</label>
+            <input type="text" class="form-control" name="address" id="useraddress" v-model="form.user.address"
+            placeholder="請輸入地址"
+            :class="{'is-invalid' : errors.has('address')}"
+            v-validate="'required'">
+            <span class="text-danger" v-if="errors.has('address')">地址欄位不得留空</span>
+          </div>
+
+          <div class="form-group">
+            <label for="comment">留言</label>
+            <textarea name="" id="comment" class="form-control" cols="30" rows="10" v-model="form.message"></textarea>
+          </div>
+          <div class="text-right">
+            <button class="btn btn-danger">送出訂單</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- product modal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -64,7 +158,10 @@
             <div class="text-muted text-nowrap mr-3">
               小計 <strong>{{ product.num * product.price }}</strong> 元
             </div>
-            <button type="button" class="btn btn-primary">
+            <button
+            type="button"
+            class="btn btn-primary"
+            @click="addtoCart(product.id, product.num)">
               加到購物車
             </button>
           </div>
@@ -82,7 +179,18 @@ export default {
     return {
       products: [],
       product: {},
-      isLoading: false
+      cart: {},
+      coupon: "",
+      isLoading: false,
+      form: {
+        user:{
+          name: '',
+          email: '',
+          tel: '',
+          address: ''
+        },
+        message: ''
+      }
     }
   },
   methods: {
@@ -103,7 +211,6 @@ export default {
         this.product = res.data.product
         $('#productModal').modal('show');
         this.isLoading = false
-
       })
     },
     addtoCart(id, qty = 1) {
@@ -113,12 +220,44 @@ export default {
         qty
       }
       this.$http.post(api, { data: cart }).then((res) => {
+        // console.log(res.data)
+        this.getCart()
+        $('#productModal').modal('hide')
+      })
+    },
+    getCart() {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
+      this.$http.get(api).then((res) => {
         console.log(res.data)
+        this.cart = res.data.data
+      })
+    },
+    removeCartItem(id) {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart/${id}`
+      this.isLoading = true
+      this.$http.delete(api).then(() => {
+        // console.log(res.data)
+        this.getCart()
+        this.isLoading = false
+      })
+    },
+    createOrder() {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/order`
+      const order = this.form
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          this.$http.post(api, {data: order}).then((res) => {
+            console.log('訂單已建立', res)
+          })
+        } else {
+          console.log("欄位不完整")
+        }
       })
     }
   },
   created () {
-    this.getProducts()
+    this.getProducts(),
+    this.getCart()
   }
 
 }
