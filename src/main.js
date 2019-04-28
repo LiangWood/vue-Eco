@@ -10,6 +10,7 @@ import router from './router'
 import './bus'
 import pagination from './components/pagination'
 import currencyFilter from './filters/currency'
+import percentage from './filters/percentage'
 import VeeValidate from 'vee-validate'
 import zhTWValidate from 'vee-validate/dist/locale/zh_TW'
 
@@ -25,6 +26,7 @@ VeeValidate.Validator.localize('zh_TW', zhTWValidate)
 Vue.component('Loading', Loading)
 Vue.component('pagination', pagination)
 Vue.filter('currency', currencyFilter)
+Vue.filter('percentage', percentage)
 
 new Vue({
   router,

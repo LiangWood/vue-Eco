@@ -5,6 +5,7 @@ import Products from './components/pages/products.vue'
 import Dashboard from './components/Dashboard.vue'
 import CustomOrder from './components/pages/CustomOrder.vue'
 import coupon from './components/pages/coupon.vue'
+import order from './components/pages/order.vue'
 
 Vue.use(Router)
 
@@ -47,7 +48,12 @@ export default new Router({
           path: 'custom_order',
           name: 'custom_order',
           component: CustomOrder
-        }
+        },
+        {
+            path: 'custom_order/:orderId',
+            name: 'order',
+            component: order
+          }
       ]
     }
   ]

@@ -55,9 +55,9 @@
             </td>
             <td class="align-middle">
               {{ item.product.title }}
-              <!-- <div class="text-success" v-if="item.coupon">
+              <div class="text-success" v-if="item.coupon">
                 已套用優惠券
-              </div> -->
+              </div>
             </td>
             <td class="align-middle">{{ item.qty }}/{{ item.product.unit }}</td>
             <td class="align-middle text-right">{{ item.final_total }}</td>
@@ -75,9 +75,9 @@
         </tfoot>
       </table>
       <div class="input-group mb-3 input-group-sm">
-        <input type="text" class="form-control" v-model="cart.coupon" placeholder="請輸入優惠碼">
+        <input type="text" class="form-control" v-model="couponCode" placeholder="請輸入優惠碼">
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button">
+          <button class="btn btn-outline-secondary" type="button" @click="addCouponCode">
             套用優惠碼
           </button>
         </div>
@@ -180,7 +180,7 @@ export default {
       products: [],
       product: {},
       cart: {},
-      coupon: "",
+      couponCode: "",
       isLoading: false,
       form: {
         user:{
@@ -241,13 +241,29 @@ export default {
         this.isLoading = false
       })
     },
+    addCouponCode() {
+        const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/coupon`
+        const coupon = {
+            code: this.couponCode
+        }
+        this.isLoading = true
+        this.$http.post(api, { data: coupon }).then((res) => {
+            console.log(res)
+            this.getCart()
+            this.isLoading = false
+        })
+    },
     createOrder() {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/order`
       const order = this.form
       this.$validator.validate().then(valid => {
         if (valid) {
           this.$http.post(api, {data: order}).then((res) => {
+
+            if(res.data.success) {
             console.log('訂單已建立', res)
+            this.$router.push(`/custom_order/${res.data.orderId}`)
+            }
           })
         } else {
           console.log("欄位不完整")
