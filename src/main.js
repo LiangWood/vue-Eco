@@ -11,6 +11,8 @@ import './bus'
 import pagination from './components/pagination'
 import currencyFilter from './filters/currency'
 import percentage from './filters/percentage'
+import timetamps from './filters/timetamps'
+
 import VeeValidate from 'vee-validate'
 import zhTWValidate from 'vee-validate/dist/locale/zh_TW'
 
@@ -27,6 +29,7 @@ Vue.component('Loading', Loading)
 Vue.component('pagination', pagination)
 Vue.filter('currency', currencyFilter)
 Vue.filter('percentage', percentage)
+Vue.filter('timetamps', timetamps)
 
 new Vue({
   router,

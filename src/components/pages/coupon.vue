@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white">
-                <tr v-for="item in coupons" :key="item.id"> 
+                <tr v-for="item in coupons" :key="item.id">
                     <td>{{ item.couponName }}</td>
                     <td>{{ item.couponCode }}</td>
                     <td>{{ item.percent | percentage }}</td>
@@ -35,7 +35,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+      </div>
 
         <!-- pagination -->
     <pagination :pageData="pagination" @changepage="getCoupons"></pagination>

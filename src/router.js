@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard.vue'
 import CustomOrder from './components/pages/CustomOrder.vue'
 import coupon from './components/pages/coupon.vue'
 import order from './components/pages/order.vue'
+import orderList from './components/pages/orderList.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,12 @@ export default new Router({
           path: 'products',
           name: 'products',
           component: Products,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'orderlist',
+          name: 'orderList',
+          component: orderList,
           meta: { requiresAuth: true }
         }
       ]
