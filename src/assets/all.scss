@@ -3,7 +3,25 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC|Open+Sans');
 
 body {
-    font-family: "Open Sans";
-    font-family: "Noto Sans TC";
+    font-family: "Noto Sans TC", "Open Sans";
     font-size: 1rem;
 }
+
+.table {
+    thead th,
+    td {
+    border: 1px solid #dee2e6;
+    }
+    thead th {
+      text-align: center;
+      background-color: #eee;
+    }
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style:none;
+      color: blue
+    }
+  }

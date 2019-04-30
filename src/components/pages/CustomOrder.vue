@@ -68,7 +68,7 @@
             <td colspan="3" class="text-right">總計</td>
             <td class="text-right">{{ cart.total }}</td>
           </tr>
-          <tr v-if="cart.final_total !== cart.total">
+          <tr>
             <td colspan="3" class="text-right text-success">折扣價</td>
             <td class="text-right text-success">{{ cart.final_total }}</td>
           </tr>
@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <div name="orderForm" class="container">
       <div class="my-5 row justify-content-center">
         <form class="col-md-6" @submit.prevent="createOrder">
           <div class="form-group">
@@ -220,7 +220,7 @@ export default {
         qty
       }
       this.$http.post(api, { data: cart }).then((res) => {
-        // console.log(res.data)
+        console.log('加入購物車', res.data)
         this.getCart()
         $('#productModal').modal('hide')
       })
