@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-//後台
+// 後台
 import Login from './components/pages/login.vue'
 import Products from './components/pages/products.vue'
 import Dashboard from './components/Dashboard.vue'
@@ -10,7 +10,7 @@ import coupon from './components/pages/coupon.vue'
 import order from './components/pages/order.vue'
 import orderList from './components/pages/orderList.vue'
 
-//前台
+// 前台
 import mainPage from './components/mainpage.vue'
 
 Vue.use(Router)
@@ -26,7 +26,7 @@ export default new Router({
       name: 'login',
       component: Login
     },
-    //後台
+    // 後台
     {
       path: '/admin',
       name: 'Dashboard',
@@ -56,13 +56,13 @@ export default new Router({
           component: CustomOrder
         },
         {
-            path: 'custom_order/:orderId',
-            name: 'order',
-            component: order
+          path: 'custom_order/:orderId',
+          name: 'order',
+          component: order
         }
       ]
     },
-    //前台
+    // 前台
     {
       path: '/',
       name: 'mainPage',

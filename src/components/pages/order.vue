@@ -58,34 +58,34 @@
 
 <script>
 export default {
-    data() {
-        return {
-            order: {
-                user: {}
-            },
-            orderId: ''
-        }
-    },
-    methods: {
-        getOrder() {
-            const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/order/${this.orderId}`
-            this.$http.get(api).then((res) => {
-                console.log(res)
-                this.order = res.data.order
-            })
-        },
-        payOrder() {
-            const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/pay/${this.orderId}`
-            this.$http.post(api).then((res) => {
-                console.log(res)
-                this.getOrder()
-            })
-        }
-    },
-    created() {
-        this.orderId = this.$route.params.orderId
-        // console.log(this.orderId)
-        this.getOrder()
+  data () {
+    return {
+      order: {
+        user: {}
+      },
+      orderId: ''
     }
+  },
+  methods: {
+    getOrder () {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/order/${this.orderId}`
+      this.$http.get(api).then((res) => {
+        console.log(res)
+        this.order = res.data.order
+      })
+    },
+    payOrder () {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/pay/${this.orderId}`
+      this.$http.post(api).then((res) => {
+        console.log(res)
+        this.getOrder()
+      })
+    }
+  },
+  created () {
+    this.orderId = this.$route.params.orderId
+    // console.log(this.orderId)
+    this.getOrder()
+  }
 }
 </script>

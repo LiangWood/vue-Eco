@@ -61,7 +61,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       isLoading: false,
       orders: [],
@@ -71,18 +71,18 @@ export default {
     }
   },
   methods: {
-    getOrders(page=1) {
-        const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/orders?page=${page}`
-        this.isLoading = true
-        this.$http.get(api).then((res) => {
-            console.log(res.data)
-            this.orders = res.data.orders
-            this.pagination = res.data.pagination
-            this.isLoading = false
-        })
+    getOrders (page = 1) {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/orders?page=${page}`
+      this.isLoading = true
+      this.$http.get(api).then((res) => {
+        console.log(res.data)
+        this.orders = res.data.orders
+        this.pagination = res.data.pagination
+        this.isLoading = false
+      })
     }
   },
-  created() {
+  created () {
     this.getOrders()
   }
 }

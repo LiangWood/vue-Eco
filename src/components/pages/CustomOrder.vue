@@ -180,10 +180,10 @@ export default {
       products: [],
       product: {},
       cart: {},
-      couponCode: "",
+      couponCode: '',
       isLoading: false,
       form: {
-        user:{
+        user: {
           name: '',
           email: '',
           tel: '',
@@ -203,17 +203,17 @@ export default {
         this.products = res.data.products
       })
     },
-    getProduct(id) {
+    getProduct (id) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/product/${id}`
       this.isLoading = true
       this.$http.get(api).then((res) => {
         console.log(res.data)
         this.product = res.data.product
-        $('#productModal').modal('show');
+        $('#productModal').modal('show')
         this.isLoading = false
       })
     },
-    addtoCart(id, qty = 1) {
+    addtoCart (id, qty = 1) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
       const cart = {
         product_id: id,
@@ -225,14 +225,14 @@ export default {
         $('#productModal').modal('hide')
       })
     },
-    getCart() {
+    getCart () {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
       this.$http.get(api).then((res) => {
         console.log(res.data)
         this.cart = res.data.data
       })
     },
-    removeCartItem(id) {
+    removeCartItem (id) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart/${id}`
       this.isLoading = true
       this.$http.delete(api).then(() => {
@@ -241,32 +241,31 @@ export default {
         this.isLoading = false
       })
     },
-    addCouponCode() {
-        const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/coupon`
-        const coupon = {
-            code: this.couponCode
-        }
-        this.isLoading = true
-        this.$http.post(api, { data: coupon }).then((res) => {
-            console.log(res)
-            this.getCart()
-            this.isLoading = false
-        })
+    addCouponCode () {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/coupon`
+      const coupon = {
+        code: this.couponCode
+      }
+      this.isLoading = true
+      this.$http.post(api, { data: coupon }).then((res) => {
+        console.log(res)
+        this.getCart()
+        this.isLoading = false
+      })
     },
-    createOrder() {
+    createOrder () {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/order`
       const order = this.form
       this.$validator.validate().then(valid => {
         if (valid) {
-          this.$http.post(api, {data: order}).then((res) => {
-
-            if(res.data.success) {
-            console.log('訂單已建立', res)
-            this.$router.push(`/custom_order/${res.data.orderId}`)
+          this.$http.post(api, { data: order }).then((res) => {
+            if (res.data.success) {
+              console.log('訂單已建立', res)
+              this.$router.push(`/custom_order/${res.data.orderId}`)
             }
           })
         } else {
-          console.log("欄位不完整")
+          console.log('欄位不完整')
         }
       })
     }

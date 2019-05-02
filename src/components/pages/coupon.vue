@@ -133,84 +133,84 @@
 <script>
 import $ from 'jquery'
 export default {
-    data() {
-        return {
-            coupons: [],
-            pagination: {},
-            tempCoupon: {},
-            isNew: false,
-            isLoading: false,
-            status: {
-                loading: false
-            }
-        }
-    },
-    methods: {
-        getCoupons (page = 1) {
-            const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupons?page=${page}`
-            this.isLoading = true
-            this.$http.get(api).then((res) => {
-                this.isLoading = false
-                console.log(res.data)
-                this.coupons = res.data.coupons
-                this.pagination = res.data.pagination
-            })
-        },
-        openModal(is_New, item) {
-            if(is_New) {
-                this.tempCoupon = {}
-                this.isNew = true
-            } else {
-                this.tempCoupon = {...item}
-                this.isNew = false
-            }
-            $('#couponModal').modal('show')
-        },
-        openDeleteModal(item) {
-            console.log(item)
-            this.tempCoupon = item
-            $('#deleteModal').modal('show');
-        },
-        deleteItem() {
-            let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupon/${this.tempCoupon.id}`
-            this.isLoading = true
-            this.$http.delete(api).then((res) => {
-                console.log(res.data)
-                if (res.data.success) {
-                $('#deleteModal').modal('hide')
-                this.isLoading = false
-                this.getCoupons()
-                } else {
-                $('#deleteModal').modal('hide')
-                this.isLoading = false
-                this.getCoupons()
-                console.log('刪除失敗')
-                }
-            })
-        },
-        updateCoupon () {
-            let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupon`
-            let httpMethods = 'post'
-            if (!this.isNew) {
-                api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupon/${this.tempCoupon.id}`
-                httpMethods = 'put'
-            }
-            this.$http[httpMethods](api, { data: this.tempCoupon }).then((res) => {
-                console.log(res.data)
-                if (res.data.success) {
-                $('#couponModal').modal('hide')
-                this.getCoupons()
-                } else {
-                $('#couponModal').modal('hide')
-                this.$bus.$emit('message:push', res.data.message, 'danger')
-                this.getCoupons()
-                console.log('新增失敗')
-                }
-            })
-        },
-    },
-    created() {
-        this.getCoupons()
+  data () {
+    return {
+      coupons: [],
+      pagination: {},
+      tempCoupon: {},
+      isNew: false,
+      isLoading: false,
+      status: {
+        loading: false
+      }
     }
+  },
+  methods: {
+    getCoupons (page = 1) {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupons?page=${page}`
+      this.isLoading = true
+      this.$http.get(api).then((res) => {
+        this.isLoading = false
+        console.log(res.data)
+        this.coupons = res.data.coupons
+        this.pagination = res.data.pagination
+      })
+    },
+    openModal (is_New, item) {
+      if (is_New) {
+        this.tempCoupon = {}
+        this.isNew = true
+      } else {
+        this.tempCoupon = { ...item }
+        this.isNew = false
+      }
+      $('#couponModal').modal('show')
+    },
+    openDeleteModal (item) {
+      console.log(item)
+      this.tempCoupon = item
+      $('#deleteModal').modal('show')
+    },
+    deleteItem () {
+      let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupon/${this.tempCoupon.id}`
+      this.isLoading = true
+      this.$http.delete(api).then((res) => {
+        console.log(res.data)
+        if (res.data.success) {
+          $('#deleteModal').modal('hide')
+          this.isLoading = false
+          this.getCoupons()
+        } else {
+          $('#deleteModal').modal('hide')
+          this.isLoading = false
+          this.getCoupons()
+          console.log('刪除失敗')
+        }
+      })
+    },
+    updateCoupon () {
+      let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupon`
+      let httpMethods = 'post'
+      if (!this.isNew) {
+        api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/coupon/${this.tempCoupon.id}`
+        httpMethods = 'put'
+      }
+      this.$http[httpMethods](api, { data: this.tempCoupon }).then((res) => {
+        console.log(res.data)
+        if (res.data.success) {
+          $('#couponModal').modal('hide')
+          this.getCoupons()
+        } else {
+          $('#couponModal').modal('hide')
+          this.$bus.$emit('message:push', res.data.message, 'danger')
+          this.getCoupons()
+          console.log('新增失敗')
+        }
+      })
+    }
+  },
+  created () {
+    this.getCoupons()
+  }
 }
 </script>
