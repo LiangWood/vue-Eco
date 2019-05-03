@@ -2,9 +2,20 @@
 @import "./_dashboard";
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC|Open+Sans');
 
+html {
+  height: 100%;
+}
+
 body {
+    box-sizing: border-box;
     font-family: "Noto Sans TC", "Open Sans";
     font-size: 1rem;
+    background-color: #dee2e6;
+    min-height: 100%;
+
+    .mainContent {
+      min-height: calc(100vh - 214px - 96px);
+    }
 }
 
 .table {
@@ -25,3 +36,4 @@ body {
       color: blue
     }
   }
+

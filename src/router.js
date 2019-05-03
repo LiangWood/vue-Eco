@@ -12,6 +12,7 @@ import orderList from './components/pages/orderList.vue'
 
 // 前台
 import mainPage from './components/mainpage.vue'
+import productDetail from './components/pages/productDetail.vue'
 
 Vue.use(Router)
 
@@ -19,7 +20,7 @@ export default new Router({
   routes: [
     {
       path: '*',
-      redirect: Login
+      redirect: mainPage
     },
     {
       path: '/login',
@@ -53,7 +54,7 @@ export default new Router({
         {
           path: 'custom_order',
           name: 'custom_order',
-          component: CustomOrder
+          component: CustomOrder,
         },
         {
           path: 'custom_order/:orderId',
@@ -66,8 +67,12 @@ export default new Router({
     {
       path: '/',
       name: 'mainPage',
-      component: mainPage,
-      children: []
+      component: mainPage
+    },
+    {
+      path: '/productDetail/:prodId',
+      name: 'productDetail',
+      component: productDetail
     }
   ]
 })
