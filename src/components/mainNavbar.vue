@@ -33,7 +33,8 @@
               </tr>
             </tbody>
           </table>
-          <a href="#" class="btn btn-info btn-block">
+          <div class="total-price mb-3 text-primary">總計：{{ shopCart.total }} 元</div>
+          <a href="#" class="btn btn-info btn-block" @click.prevent="shoppingCartCheck()">
             <i class="fa fa-cart-plus" aria-hidden="true"></i> 前往結帳
           </a>
         </div>
@@ -58,7 +59,7 @@ export default {
           this.shopCart = res.data.data
         })
     },
-  removeCartItem (id) {
+    removeCartItem (id) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart/${id}`
       this.isLoading = true
       this.$http.delete(api).then(() => {
@@ -66,6 +67,9 @@ export default {
         this.$bus.$emit('shopCart:update')
         this.isLoading = false
       })
+    },
+    shoppingCartCheck() {
+      this.$router.push(`/shoppingcartcheck`)
     }
   },
   created() {
@@ -78,5 +82,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.btn:focus {
+  box-shadow: none;
+}
 </style>

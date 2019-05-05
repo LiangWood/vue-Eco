@@ -1,0 +1,223 @@
+<template>
+<div>
+    <div class="container main-contant py-5">
+      <h1 class="text-center mb-3 text-secondary">結帳</h1>
+      <section class="form-row align-items-center text-center">
+        <div class="col">
+          <div class="alert alert-success alert-rounded mb-0" role="alert">
+            1.輸入訂單資料
+          </div>
+        </div>
+        <div class="col">
+          <div class="alert alert-light alert-rounded mb-0" role="alert">
+            2.金流付款
+          </div>
+        </div>
+        <div class="col">
+          <div class="alert alert-light alert-rounded mb-0" role="alert">
+            3.完成
+          </div>
+        </div>
+      </section>
+      <section class="row justify-content-center mt-5">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h6 class="mb-0 d-flex align-items-center">
+                <a data-toggle="collapse" href="#CartCollapse">
+                  顯示購物車細節
+                  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                </a>
+                <span class="h3 ml-auto mb-0">{{ shopCart.total }}</span>
+              </h6>
+
+            </div>
+          </div>
+          <div id="CartCollapse" class="collapse mt-3">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th width="30"></th>
+                  <th width="100"></th>
+                  <th>商品名稱</th>
+                  <th width="100">數量</th>
+                  <th width="80">小計</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in carts" :key="item.id">
+                  <td class="align-middle text-center">
+                    <a href="#removeModal" class="text-muted" data-toggle="modal">
+                      <i class="fas fa-trash" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                  <td class="align-middle">
+                    <img
+                    :src="item.product.imageUrl"
+                    style="height:100px;width:150px;"
+                    class="img-fluid img-thumbnail" 
+                    :alt="item.product.title">
+                  </td>
+                  <td class="align-middle">{{ item.product.title }}</td>
+                  <td class="align-middle">{{ item.product.num }}{{ item.product.unit }}</td>
+                  <td class="align-middle text-right">{{ item.product.price }}</td>
+                </tr>
+                <!-- <tr>
+                  <td colspan="4" class="text-right">運費</td>
+                  <td class="text-right">
+                    <strong>$60</strong>
+                  </td>
+                </tr> -->
+                <tr>
+                  <td colspan="4" class="text-right">合計</td>
+                  <td class="text-right">
+                    <strong>{{ shopCart.total | currency }}</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h5 class="py-3 mt-5 mb-2 text-center bg-light">
+            訂購人資訊
+          </h5>
+          <form @submit.prevent="createOrder">
+            <div class="form-row">
+              <div class="form-group col-md">
+                <label for="username">姓名</label>
+                <input 
+                id="username"
+                name="name"
+                type="text" 
+                class="form-control" 
+                placeholder="請輸入姓名" 
+                v-model="form.user.name"
+                v-validate="'required'"
+                :class="{'is-invalid' : errors.has('name')}">
+              <span class="text-danger" v-if="errors.has('name')">姓名為必填</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md">
+                <label for="email">Email</label>
+                <input 
+                id="email" 
+                name="email"
+                type="email" 
+                class="form-control" 
+                placeholder="請輸入Email" 
+                v-model="form.user.email"
+                v-validate="'required|email'"
+                :class="{'is-invalid' : errors.has('email')}">
+                <span class="text-danger" v-if="errors.has('email')">{{ errors.first('email') }}</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md">
+                <label for="tel">電話</label>
+                <input 
+                id="tel"
+                name="tel"
+                type="text" 
+                class="form-control" 
+                placeholder="請輸入電話" 
+                v-model="form.user.tel">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputAddress">地址</label>
+              <input 
+              id="inputAddress" 
+              name="address"
+              type="text" 
+              class="form-control" 
+              placeholder="請輸入地址" 
+              v-model="form.user.address"
+              v-validate="'required'"
+              :class="{'is-invalid' : errors.has('address')}">
+              <span class="text-danger" v-if="errors.has('address')">地址不能為空</span>
+            </div>
+            <div class="form-group">
+              <label for="message">其他</label>
+              <textarea class="form-control" name="message" id="message" rows="10" v-model="form.user.message"></textarea>
+            </div>
+            <div class="text-right">
+              <a href="shoppingCart.html" class="btn btn-secondary mr-1">繼續選購</a>
+              <button type="submit" class="btn btn-primary">確認付款</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">刪除商品</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>是否確認刪除商品</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">否</button>
+            <button type="button" class="btn btn-outline-danger px-5">是</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      shopCart: {},
+      carts:[],
+      form:{
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: ''
+        },
+        message: ''
+      }
+    }
+  },
+  methods: {
+    getCart () {
+        const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
+        this.$http.get(api).then((res) => {
+          console.log(res.data)
+          this.shopCart = res.data.data
+          this.carts = this.shopCart.carts
+        })
+    },
+    createOrder () {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/order`
+      const order = this.form
+      this.$validator.validate().then(valid => {
+        if (valid) {
+          this.$http.post(api, { data: order }).then((res) => {
+            if (res.data.success) {
+              console.log('訂單已建立', res)
+              this.$router.push(`/shoppingcartcheck/${res.data.orderId}`)
+            }
+          })
+        } else {
+          console.log('欄位不完整')
+        }
+      })
+    }
+  },
+  created() {
+    this.getCart()
+  }
+}
+</script>

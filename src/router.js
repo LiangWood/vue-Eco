@@ -13,6 +13,8 @@ import orderList from './components/pages/orderList.vue'
 // 前台
 import mainPage from './components/mainpage.vue'
 import productDetail from './components/pages/productDetail.vue'
+import shoppingCartCheck from './components/pages/shoppingCartCheck.vue'
+import shoppingOrder from './components/pages/shoppingOrder.vue'
 
 Vue.use(Router)
 
@@ -54,7 +56,7 @@ export default new Router({
         {
           path: 'custom_order',
           name: 'custom_order',
-          component: CustomOrder,
+          component: CustomOrder
         },
         {
           path: 'custom_order/:orderId',
@@ -73,6 +75,16 @@ export default new Router({
       path: '/productDetail/:prodId',
       name: 'productDetail',
       component: productDetail
+    },
+    {
+      path: '/shoppingcartcheck',
+      name: 'shoppingCartCheck',
+      component: shoppingCartCheck
+    },
+    {
+      path: '/shoppingcartcheck/:orderId',
+      name: 'shoppingOrder',
+      component: shoppingOrder
     }
   ]
 })

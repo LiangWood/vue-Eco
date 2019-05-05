@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const api = `${process.env.VUE_APP_APIPATH}/api/user/check`
     axios.post(api).then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       if (res.data.success) {
         next()
       } else {
