@@ -69,7 +69,14 @@ export default {
       })
     },
     shoppingCartCheck() {
-      this.$router.push(`/shoppingcartcheck`)
+      let cartItem = this.shopCart;
+
+      if(cartItem.carts == "") {
+        alert(`購物車沒有東西，請前往購物`)
+      } else {
+        this.$router.push(`/shoppingcartcheck`)
+      }
+
     }
   },
   created() {

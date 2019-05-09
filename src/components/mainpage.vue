@@ -46,10 +46,12 @@
 import navbar from './mainNavbar'
 import Footer from './footer'
 import product from './mainProduct'
+import alertMessage from './AlertMessage';
 import catergory from './pages/catergory'
 
 export default {
   components: {
+    alertMessage,
     navbar,
     product,
     catergory,
