@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-
+    <alertMessage />
     <!-- footer -->
     <Footer />
 

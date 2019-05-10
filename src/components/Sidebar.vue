@@ -36,7 +36,7 @@
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                <router-link class="nav-link" to="/custom_order">
+                <router-link class="nav-link" to="/admin/custom_order">
                 <i class="fas fa-box-open"></i>
                 模擬訂單列表
                 </router-link>

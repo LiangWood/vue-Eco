@@ -28,8 +28,8 @@
                   </button>
                 </td>
                 <td class="align-middle">{{ item.product.title }}</td>
-                <td class="align-middle">{{ item.product.num }} {{ item.product.unit }}</td>
-                <td class="align-middle text-right">{{ item.product.price | currency }}</td>
+                <td class="align-middle">{{ item.qty }} {{ item.product.unit }}</td>
+                <td class="align-middle text-right">{{ item.total | currency }}</td>
               </tr>
             </tbody>
           </table>

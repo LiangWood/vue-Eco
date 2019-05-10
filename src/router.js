@@ -32,6 +32,7 @@ export default new Router({
     // 後台
     {
       path: '/admin',
+      redirect: '/login',
       name: 'Dashboard',
       component: Dashboard,
       children: [
