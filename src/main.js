@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
+import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Loading from 'vue-loading-overlay'
@@ -18,6 +20,8 @@ import zhTWValidate from 'vee-validate/dist/locale/zh_TW'
 
 Vue.config.productionTip = false
 
+Vue.use(Vuex)
+
 Vue.use(VueAxios, axios)
 axios.defaults.withCredentials = true
 
@@ -33,6 +37,7 @@ Vue.filter('timetamps', timetamps)
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
 

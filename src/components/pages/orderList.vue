@@ -33,7 +33,7 @@
                             {{prod.product.title}}<br>
                             {{prod.qty}} {{prod.product.unit}} -
                             <span class="text-main" v-if="prod.final_total >= prod.total">{{prod.final_total | currency}}</span>
-                            <span class="text-danger" v-if="prod.final_total < prod.total">{{prod.final_total | currency}} ({{prod.coupon.title}})</span>
+                            <span class="text-danger" v-if="prod.final_total < prod.total">{{prod.final_total | currency}} ({{prod.coupon.couponName}})</span>
                           </div>
                         </li>
                       </ul>
