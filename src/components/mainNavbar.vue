@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       isActive: false,
       shopCart: {}
@@ -53,11 +53,11 @@ export default {
   },
   methods: {
     getCart () {
-        const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
-        this.$http.get(api).then((res) => {
-          console.log(res.data)
-          this.shopCart = res.data.data
-        })
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
+      this.$http.get(api).then((res) => {
+        console.log(res.data)
+        this.shopCart = res.data.data
+      })
     },
     removeCartItem (id) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart/${id}`
@@ -68,22 +68,21 @@ export default {
         this.isLoading = false
       })
     },
-    shoppingCartCheck() {
-      let cartItem = this.shopCart;
+    shoppingCartCheck () {
+      let cartItem = this.shopCart
 
-      if(cartItem.carts == "") {
+      if (cartItem.carts == '') {
         alert(`購物車沒有東西，請前往購物`)
       } else {
         this.$router.push(`/shoppingcartcheck`)
       }
-
     }
   },
-  created() {
+  created () {
     this.getCart()
     this.$bus.$on('shopCart:update', () => {
-      this.getCart();
-    });
+      this.getCart()
+    })
   }
 }
 </script>

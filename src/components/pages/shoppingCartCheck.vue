@@ -192,12 +192,12 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       coupon_code: '',
       shopCart: {},
-      carts:[],
-      form:{
+      carts: [],
+      form: {
         user: {
           name: '',
           email: '',
@@ -210,12 +210,12 @@ export default {
   },
   methods: {
     getCart () {
-        const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
-        this.$http.get(api).then((res) => {
-          console.log(res.data)
-          this.shopCart = res.data.data
-          this.carts = this.shopCart.carts
-        })
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
+      this.$http.get(api).then((res) => {
+        console.log(res.data)
+        this.shopCart = res.data.data
+        this.carts = this.shopCart.carts
+      })
     },
     createOrder () {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/order`
@@ -247,7 +247,7 @@ export default {
       })
     }
   },
-  created() {
+  created () {
     this.getCart()
   }
 }

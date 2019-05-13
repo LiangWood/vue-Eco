@@ -13,29 +13,28 @@
   </div>
 </template>
 
-
 <script>
 import mainProduct from '../mainProduct'
 export default {
   props: {
-    category:{
+    category: {
       type: Array,
-      default: ()=>{[]}
+      default: () => { [] }
     }
   },
   data () {
     return {
-      activeIndex:''
+      activeIndex: ''
     }
   },
   methods: {
-    setActive(item, index) {
+    setActive (item, index) {
       //  console.log(item, index)
-       this.activeIndex = index
-       this.$emit('changeCategory', item)
+      this.activeIndex = index
+      this.$emit('changeCategory', item)
     }
   },
-  created() {
+  created () {
   }
 }
 </script>
