@@ -51,7 +51,7 @@
 import navbar from '../mainNavbar'
 import Footer from '../footer'
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -64,37 +64,14 @@ export default {
       default: () => { {} }
     }
   },
-  data () {
-    return {
-      cart: {}
-    }
-  },
   methods: {
     getProduct (id) {
       this.$store.dispatch('getProduct', id)
     },
     addtoCart (id, qty = 1) {
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
-      const cart = {
-        product_id: id,
-        qty
-      }
-      this.$http.post(api, { data: cart }).then((res) => {
-        console.log('加入購物車', res.data)
-        if (res.data.success) {
-          this.$bus.$emit('shopCart:update')
-          this.$bus.$emit('message:push', `【${res.data.data.product.title}】
-						${res.data.data.qty} ${res.data.data.product.unit} ${res.data.message}`, 'success')
-        }
-      })
+      this.$store.dispatch('addtoCart', {id, qty})
     },
-    getCart () {
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart`
-      this.$http.get(api).then((res) => {
-        console.log(res.data)
-        this.cart = res.data.data
-      })
-    }
+    ...mapActions(['getCart'])
   },
   created () {
     this.productId = this.$route.params.prodId
@@ -102,11 +79,10 @@ export default {
     this.getCart()
   },
   computed: {
-    product () {
-      return this.$store.state.product
-    },
     ...mapGetters([
-      'isLoading'
+      'isLoading',
+      'product',
+      'cart'
     ])
   }
 }

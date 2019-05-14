@@ -28,7 +28,8 @@
                   顯示購物車細節
                   <i class="fa fa-angle-down" aria-hidden="true"></i>
                 </a>
-                <span class="h3 ml-auto mb-0">{{ shopCart.total }}</span>
+                <span v-if="shopCart.total <= shopCart.final_total" class="h3 ml-auto mb-0">{{ shopCart.total }}</span>
+                <span v-else class="h3 ml-auto mb-0">{{ shopCart.final_total }}</span>
               </h6>
 
             </div>
