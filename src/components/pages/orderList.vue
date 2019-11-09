@@ -45,14 +45,106 @@
                         <span v-else :class="{'text-danger' : !item.is_paid}">未付款</span>
                     </td>
                     <td>
-                        <button class="btn btn-outline-secondary btn-sm mr-1" @click="openModal(false, item)">編輯</button>
-                        <button class="btn btn-outline-danger btn-sm" @click="openDeleteModal(item)">刪除</button>
+                        <button class="btn btn-outline-secondary btn-sm mr-1" @click="openModal(item)">編輯訂單</button>
                     </td>
                   </template>
                 </tr>
             </tbody>
         </table>
       </div>
+
+      <div
+      class="modal fade"
+      id="orderModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+      >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content border-0">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <span>修改訂單</span>
+            </h5>
+            <button
+              type="button"
+              class="close text-white"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12">
+                <label class="h5">購買款項</label>
+                <ul class="list-group">
+                  <li
+                    class="list-group-item"
+                    v-for="item in tempOrder.products"
+                    :key="item.id"
+                  >
+                    <div class="row no-gutters">
+                      <div class="col-9">
+                        <span>{{ item.product.title }}</span>
+                      </div>
+                      <div class="col-3">
+                        <span>數量：{{ item.qty }}</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item form-inline">
+                    <div class="form-group d-flex justify-content-end">
+                      <label for="inputTotal">總計：</label>
+                      <input
+                        type="number"
+                        class="form-control w-25"
+                        id="inputTotal"
+                        placeholder="請輸入金額"
+                        min="0"
+                        v-model.number="tempOrder.total"
+                      />
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="form-group container mt-4">
+                <label class="h5 mb-3" for="is_enabled">是否付款</label>
+                <div class="form-check px-4">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="is_enabled"
+                    v-model.number="tempOrder.is_paid"
+                  />
+                  <label class="form-check-label" for="is_enabled">
+                    <span class="text-success" v-if="tempOrder.is_paid"
+                      >已付款</span
+                    >
+                    <span class="text-danger" v-else>未付款</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer bg-dark">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              取消
+            </button>
+            <button type="button" class="btn btn-primary" @click="updateOrder">
+              更新
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- pagination -->
     <pagination :pageData="pagination" @changepage="getOrders"></pagination>
 
@@ -60,26 +152,50 @@
 </template>
 
 <script>
+import $ from 'jquery'
+
 export default {
   data () {
     return {
       isLoading: false,
       orders: [],
-      tempOrders: {},
+      tempOrder: {},
       orderId: '',
       pagination: {}
     }
   },
   methods: {
+    openModal(item) {
+      $("#orderModal").modal('show')
+      this.tempOrder = item
+      // console.log(this.tempOrder)
+    },
     getOrders (page = 1) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/orders?page=${page}`
       this.isLoading = true
       this.$http.get(api).then((res) => {
         console.log(res.data)
-        this.orders = res.data.orders
+        this.orders = [...res.data.orders]
         this.pagination = res.data.pagination
         this.isLoading = false
       })
+    },
+    updateOrder () {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/admin/order/${this.tempOrder.id}`
+      this.isLoading = true
+      this.$http.put(api, { data:this.tempOrder })
+        .then( res => {
+          console.log(res)
+          if(res.data.success) {
+            $("#orderModal").modal('hide')
+            this.isLoading = false
+          }
+        })
+        .catch( err => {
+          console.log(err)
+          $("#orderModal").modal('hide')
+          this.isLoading = false
+        })
     }
   },
   created () {
@@ -98,6 +214,11 @@ export default {
       color: green;
       padding-bottom: 5px;
       border-bottom: 1px dashed gray;
+    }
+  }
+  .modal-footer {
+    button {
+      width: 120px;
     }
   }
 </style>

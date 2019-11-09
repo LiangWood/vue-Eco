@@ -48,7 +48,7 @@
               <tbody>
                 <tr v-for="item in carts" :key="item.id">
                   <td class="align-middle text-center">
-                    <a href="#removeModal" class="text-muted" data-toggle="modal">
+                    <a @click="openModal(item.id)">
                       <i class="fas fa-trash" aria-hidden="true"></i>
                     </a>
                   </td>
@@ -67,12 +67,6 @@
                   <td class="align-middle">{{ item.qty }}{{ item.product.unit }}</td>
                   <td class="align-middle text-right">{{ item.total }}</td>
                 </tr>
-                <!-- <tr>
-                  <td colspan="4" class="text-right">運費</td>
-                  <td class="text-right">
-                    <strong>$60</strong>
-                  </td>
-                </tr> -->
                 <tr>
                   <td colspan="4" class="text-right">合計</td>
                   <td class="text-right">
@@ -160,7 +154,7 @@
               <textarea class="form-control" name="message" id="message" rows="10" v-model.trim="form.user.message"></textarea>
             </div>
             <div class="text-right">
-              <a href="shoppingCart.html" class="btn btn-secondary mr-1">繼續選購</a>
+              <a href="/" class="btn btn-secondary mr-1">繼續選購</a>
               <button type="submit" class="btn btn-primary">確認付款</button>
             </div>
           </form>
@@ -182,7 +176,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">否</button>
-            <button type="button" class="btn btn-outline-danger px-5">是</button>
+            <button type="button" class="btn btn-outline-danger px-5" @click="deleteItem()">是</button>
           </div>
         </div>
       </div>
@@ -192,6 +186,9 @@
 </template>
 
 <script>
+
+import $ from 'jquery'
+
 export default {
   data () {
     return {
@@ -216,6 +213,25 @@ export default {
         console.log(res.data)
         this.shopCart = res.data.data
         this.carts = this.shopCart.carts
+      })
+    },
+    openModal (id) {
+      console.log(id)
+      this.tempProductId = id;
+      $('#removeModal').modal('show')
+    },
+    deleteItem () {
+      let api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_USERPATH}/cart/${this.tempProductId}`
+      this.$http.delete(api).then((res) => {
+        console.log(res.data)
+        if (res.data.success) {
+          $('#removeModal').modal('hide')
+          this.getCart()
+        } else {
+          $('#removeModal').modal('hide')
+          console.log('刪除失敗')
+          this.getCart()
+        }
       })
     },
     createOrder () {
@@ -253,3 +269,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+ i {
+   cursor: pointer;
+ }
+</style>

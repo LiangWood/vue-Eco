@@ -6,7 +6,7 @@
       <catergory :category="category" @changeCategory="changeTab"/>
     </div>
     <div class="col-md-9">
-      <div class="d-flex mb-4">
+      <div class="d-flex mb-4 mt-3">
         <div class="row w-100">
           <div class="col-md-4 mb-4" v-for="item in filterItem" :key="item.id">
               <product :item="item" :prodCategory="prodCategory"/>

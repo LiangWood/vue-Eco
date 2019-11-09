@@ -12,7 +12,7 @@
               <li class="nav-item">
                 <router-link class="nav-link" to="/admin/products">
                 <i class="fas fa-box-open"></i>
-                訂單列表
+                產品列表
                 </router-link>
               </li>
               <li class="nav-item">

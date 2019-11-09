@@ -21,7 +21,7 @@ export default {
       this.$http.post(api).then((res) => {
         console.log(res.data)
         if (res.data.success) {
-          this.$router.push('./login')
+          this.$router.push('/')
         }
       })
     }

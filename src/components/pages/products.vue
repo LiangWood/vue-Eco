@@ -205,6 +205,7 @@ export default {
         this.isNew = false
       }
       $('#productModal').modal('show')
+      console.log(this.tempProduct)
     },
     openDeleteModal (item) {
       console.log(item)
